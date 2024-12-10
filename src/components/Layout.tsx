@@ -107,7 +107,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   Car Duties
                 </Link>
                 <Link
-                  href="#shipping-schedule"
+                  href="/shipping-schedule"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
                 >
                   Shipping Schedule
