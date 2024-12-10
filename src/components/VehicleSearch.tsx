@@ -7,10 +7,16 @@ export default function VehicleSearch({ vehicleData }: { vehicleData: any[] }) {
   const [selectedYear, setSelectedYear] = useState("");
   const [filteredResults, setFilteredResults] = useState<any[]>([]);
 
-  // Reset model when brand changes
+  // Reset model and year when brand changes
   useEffect(() => {
     setSelectedModel("");
+    setSelectedYear("");
   }, [selectedBrand]);
+
+  // Reset year when model changes
+  useEffect(() => {
+    setSelectedYear("");
+  }, [selectedModel]);
 
   // Filter results when any selection changes
   useEffect(() => {
