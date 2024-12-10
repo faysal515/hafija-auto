@@ -2,6 +2,8 @@ import { useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import ShippingTable from "../components/ShippingTable";
+import VehicleSearch from "../components/VehicleSearch";
+import vehicleData from "@/assets/transformed_output.json";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -126,7 +128,10 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-xl font-bold mb-4">Shipping Schedule</h2>
+        <h2 className="text-xl font-bold mb-4">Vehicle Search</h2>
+        <VehicleSearch vehicleData={vehicleData} />
+
+        <h2 className="text-xl font-bold mb-4 mt-8">Shipping Schedule</h2>
         <ShippingTable />
       </div>
     </main>

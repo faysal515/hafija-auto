@@ -1,0 +1,122 @@
+{
+    "brands": [
+        "DAIHATSU",
+        "HINO",
+        "HONDA",
+        "ISUZU",
+        "LEXUS",
+        "MAZDA",
+        "MITSU.",
+        "NISSAN",
+        "SUZUKI",
+        "TOYOTA"
+    ],
+    "models_by_brand": {
+        "TOYOTA": [
+            "ALLION",
+            "ALPHARD",
+            "AQUA",
+            "AURIS",
+            "AXIO",
+            "AXIO CAR",
+            "C-HR",
+            "CAMRY",
+            "COROLLA",
+            "COROLLA CROSS",
+            "CROWN",
+            "CRUISER",
+            "CRUISER PRADO",
+            "DYNA PICKUP",
+            "DYNA R. VAN",
+            "ESQUIRE",
+            "ESQUIRE AMBULANCE",
+            "ESQUIRE HYB.",
+            "FIELDER",
+            "FIELDER CAR",
+            "HARRIER",
+            "HIACE",
+            "HIACE AMBULANCE",
+            "HILUX DUBLE CABIN",
+            "NOAH",
+            "NOAH AMBULANCE",
+            "NOAH HYB.",
+            "NOAH/VOXY",
+            "PIXIS PICKUP",
+            "PIXIS R. VAN",
+            "PIXIS VAN",
+            "PREMIO",
+            "PRIUS",
+            "PRIUS ALPHA",
+            "PRIUS PHV",
+            "PROBOX",
+            "PROBOX/SUCCED",
+            "RAIZ",
+            "RAIZE",
+            "RAV4",
+            "SIENTA",
+            "TOWACE PICKUP",
+            "TOWNACE",
+            "TOYOACE PICKUP",
+            "TOYOACE R. VAN",
+            "VELFIRE",
+            "VITZ",
+            "VOXY",
+            "VOXY AMBULANCE",
+            "VOXY HYB.",
+            "YARIS CROSS"
+        ],
+        "MITSU.": [
+            "ECLIPSE CROSS",
+            "MINICAB PICKUP",
+            "MINICAB R. VAN",
+            "OUTLANDER",
+            "OUTLANDER PHV"
+        ],
+        "NISSAN": [
+            "JUKE",
+            "X-TRAIL"
+        ],
+        "HONDA": [
+            "CIVIC",
+            "CR-V",
+            "FIT",
+            "GRACE",
+            "INSIGHT",
+            "JADE",
+            "SHUTTLE",
+            "VEZEL"
+        ],
+        "MAZDA": [
+            "ROADSTAR"
+        ],
+        "LEXUS": [
+            "ES",
+            "HS",
+            "NX",
+            "RX"
+        ],
+        "DAIHATSU": [
+            "HIJET",
+            "HIJET PICKUP",
+            "HIJET R.VAN"
+        ],
+        "SUZUKI": [
+            "CARY PICKUP",
+            "CARY R. VAN",
+            "SWIFT"
+        ],
+        "ISUZU": [
+            "ELF PICKUP"
+        ],
+        "HINO": [
+            "DUTRO PICKUP"
+        ]
+    },
+    "years": [
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023/2024"
+    ]
+}
