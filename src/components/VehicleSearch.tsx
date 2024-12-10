@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import analysisData from "@/assets/analysis_output.json";
 
+// Add this type at the top of the file
+type BrandKey = keyof typeof analysisData.models_by_brand;
+
 export default function VehicleSearch({ vehicleData }: { vehicleData: any[] }) {
-  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState<BrandKey | "">("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [filteredResults, setFilteredResults] = useState<any[]>([]);
@@ -49,7 +52,7 @@ export default function VehicleSearch({ vehicleData }: { vehicleData: any[] }) {
           <select
             className="w-full p-2 rounded bg-gray-700 border border-gray-600"
             value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
+            onChange={(e) => setSelectedBrand(e.target.value as BrandKey)}
           >
             <option value="">Select Brand</option>
             {analysisData.brands.map((brand) => (
