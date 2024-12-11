@@ -42,14 +42,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </svg>
             <div>
               <div>Have any Question?</div>
-              <div>+8801986106812</div>
+              <div className="space-y-1">
+                {/* <a
+                  href="tel:+8801986106812"
+                  className="hover:text-yellow-400 block"
+                >
+                  +8801986106812
+                </a> */}
+                <a
+                  href="tel:+8801710596596"
+                  className="hover:text-yellow-400 block"
+                >
+                  +8801710596596
+                </a>
+              </div>
             </div>
           </div>
 
           {/* Consultation Button */}
-          <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 md:px-6 rounded text-sm md:text-base">
+          <a
+            href="https://wa.me/+8801710596596"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 md:px-6 rounded text-sm md:text-base"
+          >
             FREE CONSULTATION
-          </button>
+          </a>
         </div>
       </div>
 
@@ -91,32 +109,37 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   href="/"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
-                  href="#about-us"
+                  href="/vehicle-search"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  About Us
+                  Vehicle Stock
                 </Link>
                 <Link
-                  href="#car-duties"
+                  href="/car-duty"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  Car Duties
+                  Car Duty
                 </Link>
                 <Link
                   href="/shipping-schedule"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Shipping Schedule
                 </Link>
                 <Link
-                  href="/vehicle-search"
+                  href="#about-us"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  Vehicle Search
+                  About Us
                 </Link>
               </div>
             </nav>
