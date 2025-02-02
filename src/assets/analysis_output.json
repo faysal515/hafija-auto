@@ -4,6 +4,7 @@
         "HINO",
         "HONDA",
         "ISUZU",
+        "LAND",
         "LEXUS",
         "MAZDA",
         "MITSU.",
@@ -22,10 +23,9 @@
             "C-HR",
             "CAMRY",
             "COROLLA",
-            "COROLLA CROSS",
+            "COROLLA \nCROSS",
+            "COROLLA CROSS2019",
             "CROWN",
-            "CRUISER",
-            "CRUISER PRADO",
             "DYNA PICKUP",
             "DYNA R. VAN",
             "ESQUIRE",
@@ -49,28 +49,28 @@
             "PRIUS ALPHA",
             "PRIUS PHV",
             "PROBOX",
-            "PROBOX/SUCCED",
+            "PROBOX/SUCCED2019",
             "RAIZ",
             "RAIZE",
             "RAV4",
             "SIENTA",
-            "TOWACE PICKUP",
+            "TOWACE PICKUP2019",
             "TOWNACE",
-            "TOYOACE PICKUP",
-            "TOYOACE R. VAN",
+            "TOYOACE PICKUP2019",
+            "TOYOACE R. VAN2019",
             "VELFIRE",
             "VITZ",
             "VOXY",
-            "VOXY AMBULANCE",
+            "VOXY AMBULANCE2019",
             "VOXY HYB.",
             "YARIS CROSS"
         ],
         "MITSU.": [
             "ECLIPSE CROSS",
-            "MINICAB PICKUP",
+            "MINICAB PICKUP 2019",
             "MINICAB R. VAN",
             "OUTLANDER",
-            "OUTLANDER PHV"
+            "OUTLANDER \nPHV"
         ],
         "NISSAN": [
             "JUKE",
@@ -89,6 +89,10 @@
         "MAZDA": [
             "ROADSTAR"
         ],
+        "LAND": [
+            "CRUISER",
+            "CRUISER PRADO"
+        ],
         "LEXUS": [
             "ES",
             "HS",
@@ -97,7 +101,7 @@
         ],
         "DAIHATSU": [
             "HIJET",
-            "HIJET PICKUP",
+            "HIJET PICKUP 2019",
             "HIJET R.VAN"
         ],
         "SUZUKI": [
