@@ -13,16 +13,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <Image
-              src={logo}
-              alt="Company Logo"
-              width={150}
-              height={40}
-              className="cursor-pointer -mt-4 w-32 md:w-auto"
-            />
-            <span className="text-xl md:text-2xl font-bold text-white">
+            <Link
+              href="https://www.hafijaauto.com.bd/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src={logo}
+                alt="Company Logo"
+                width={150}
+                height={40}
+                className="cursor-pointer -mt-4 w-32 md:w-auto"
+              />
+            </Link>
+            <Link
+              href="https://www.hafijaauto.com.bd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xl md:text-2xl font-bold text-white hover:text-yellow-400"
+            >
               HAFIJA AUTO
-            </span>
+            </Link>
           </div>
 
           {/* Contact Info */}
@@ -114,13 +125,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   Home
                 </Link>
                 <Link
-                  href="/vehicle-search"
-                  className="hover:text-yellow-400 w-full md:w-auto text-center"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Vehicle Stock
-                </Link>
-                <Link
                   href="/car-duty"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
                   onClick={() => setIsMenuOpen(false)}
@@ -135,7 +139,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   Shipping Schedule
                 </Link>
                 <Link
-                  href="#about-us"
+                  href="/verify-auction-sheet"
+                  className="hover:text-yellow-400 w-full md:w-auto text-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Verify Auction Sheet
+                </Link>
+                <Link
+                  href="/about-us"
                   className="hover:text-yellow-400 w-full md:w-auto text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
