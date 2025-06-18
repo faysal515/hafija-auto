@@ -42,12 +42,18 @@ export default function CarCarousel({ cars }: CarCarouselProps) {
     <div className="relative w-4/5 mx-auto">
       <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
         <div className="flex">
-          {cars.map((car) => (
+          {cars.map((car, idx) => (
             <div
               key={car.id}
               className="flex-[0_0_100%] min-w-0 relative h-[400px] cursor-pointer"
               onClick={() => goToCarDetail(car.id)}
             >
+              {/* Sold Out tag for the third car */}
+              {idx === 2 && (
+                <span className="absolute top-4 left-4 z-10 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg uppercase tracking-wider">
+                  Sold Out
+                </span>
+              )}
               <Image
                 src={car.image}
                 alt={car.title}

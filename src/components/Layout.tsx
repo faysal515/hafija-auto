@@ -13,11 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <Link
-              href="https://www.hafijaauto.com.bd/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link href="https://www.hafijaauto.com.bd/">
               <Image
                 src={logo}
                 alt="Company Logo"
@@ -28,8 +24,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
             <Link
               href="https://www.hafijaauto.com.bd/"
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-xl md:text-2xl font-bold text-white hover:text-yellow-400"
             >
               HAFIJA AUTO

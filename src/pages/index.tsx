@@ -1,6 +1,8 @@
 import CarCarousel from "../components/CarCarousel";
 import car1Image from "@/assets/images/car1.jpeg";
 import car2Image from "@/assets/images/car2.jpeg";
+import car3Image from "@/assets/images/car3.jpeg";
+import car4Image from "@/assets/images/car4.jpeg";
 
 export default function Home() {
   const cars = [
@@ -15,6 +17,18 @@ export default function Home() {
       image: car2Image,
       title: "Toyota Esquire Hyb 2020",
       price: "35,00,000 Taka",
+    },
+    {
+      id: 3,
+      image: car3Image,
+      title: "Toyota Fielder Hyb 2020",
+      price: "21,50,000 Taka",
+    },
+    {
+      id: 4,
+      image: car4Image,
+      title: "Toyota Corolla Cross 2024",
+      price: "52,50,000 Taka",
     },
   ];
 
