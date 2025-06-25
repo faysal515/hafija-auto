@@ -33,6 +33,64 @@ const ShippingTable = () => {
     fetchShippingData();
   }, []);
 
+  // Filter out rows where both Chittagong and Mongla are blank/"-" or Mongla date has passed
+  const filteredShippingData = shippingData.filter((row) => {
+    // Check if both Chittagong and Mongla are empty or "-"
+    const isChittagongEmpty =
+      !row.chittagong || row.chittagong === "-" || row.chittagong.trim() === "";
+    const isMonglaEmpty =
+      !row.mongla || row.mongla === "-" || row.mongla.trim() === "";
+
+    console.log("Row:", row.company, "Mongla:", row.mongla);
+
+    // If both are empty, remove the row
+    if (isChittagongEmpty && isMonglaEmpty) {
+      console.log("Removing row - both ports empty:", row.company);
+      return false;
+    }
+
+    // If Mongla has a date, check if it has passed
+    if (!isMonglaEmpty) {
+      // Try to parse the date in a robust way
+      let monglaDate: Date | null = null;
+
+      // Accepts formats: YYYY-MM-DD, DD/MM/YYYY, DD-MM-YYYY
+      if (/^\d{4}-\d{2}-\d{2}$/.test(row.mongla)) {
+        // YYYY-MM-DD
+        monglaDate = new Date(row.mongla);
+        console.log("Parsed YYYY-MM-DD format:", row.mongla, "->", monglaDate);
+      } else if (/^\d{2}[\-\/]\d{2}[\-\/]\d{4}$/.test(row.mongla)) {
+        // DD/MM/YYYY or DD-MM-YYYY
+        const [d, m, y] = row.mongla.split(/[\-\/]/);
+        monglaDate = new Date(`${y}-${m}-${d}`);
+        console.log("Parsed DD/MM/YYYY format:", row.mongla, "->", monglaDate);
+      } else {
+        console.log("Could not parse date format:", row.mongla);
+      }
+
+      // If we successfully parsed the date
+      if (monglaDate && !isNaN(monglaDate.getTime())) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        monglaDate.setHours(0, 0, 0, 0);
+
+        console.log("Comparing dates:", {
+          monglaDate: monglaDate.toISOString(),
+          today: today.toISOString(),
+          isPast: monglaDate < today,
+        });
+
+        // If the date has passed, remove the row
+        if (monglaDate < today) {
+          console.log("Removing row - date passed:", row.company, row.mongla);
+          return false;
+        }
+      }
+    }
+
+    return true;
+  });
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
@@ -73,7 +131,7 @@ const ShippingTable = () => {
           </tr>
         </thead>
         <tbody className="bg-gray-900 divide-y divide-gray-800">
-          {shippingData.map((row, index) => (
+          {filteredShippingData.map((row, index) => (
             <tr
               key={`${row.company}-${row.voyage}-${index}`}
               className={`

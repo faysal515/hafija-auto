@@ -48,10 +48,22 @@ export default function CarCarousel({ cars }: CarCarouselProps) {
               className="flex-[0_0_100%] min-w-0 relative h-[400px] cursor-pointer"
               onClick={() => goToCarDetail(car.id)}
             >
-              {/* Sold Out tag for the third car */}
-              {idx === 2 && (
+              {/* Ready At Dhaka tag for car1 */}
+              {idx === 0 && (
+                <span className="absolute top-4 left-4 z-10 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded shadow-lg uppercase tracking-wider">
+                  Ready At Dhaka
+                </span>
+              )}
+              {/* Sold Out tag for car2 */}
+              {idx === 1 && (
                 <span className="absolute top-4 left-4 z-10 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg uppercase tracking-wider">
                   Sold Out
+                </span>
+              )}
+              {/* Upcoming tag for car3 and car4 */}
+              {(idx === 2 || idx === 3) && (
+                <span className="absolute top-4 left-4 z-10 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded shadow-lg uppercase tracking-wider">
+                  Upcoming
                 </span>
               )}
               <Image
