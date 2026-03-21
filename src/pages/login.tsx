@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import NextImage from 'next/image';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginPage() {
@@ -49,7 +50,7 @@ export default function LoginPage() {
 
           {/* Logo + name */}
           <div className="flex flex-col items-center mb-8">
-            <img src="/logo.png" alt="Hafija Auto" className="h-16 w-16 object-contain mb-3" />
+            <NextImage src="/logo.png" alt="Hafija Auto" width={64} height={64} className="object-contain mb-3" />
             <h1 className="text-2xl font-bold text-yellow-400 tracking-wide">HAFIJA AUTO</h1>
             <p className="text-gray-400 text-sm mt-1">Invoice Portal</p>
           </div>

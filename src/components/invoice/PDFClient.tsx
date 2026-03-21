@@ -129,6 +129,7 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
         <View style={s.headerRow}>
           <View style={s.logoBox}>
             {/* base64 src — avoids HTTP fetch that hangs PDF generation */}
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image style={s.logo} src={LOGO_BASE64} />
           </View>
           <View style={s.headerMiddle}>

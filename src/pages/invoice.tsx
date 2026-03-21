@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import NextImage from 'next/image';
 import { useRouter } from 'next/router';
 import { generateRef, numberToWords, InvoiceData, InvoiceType } from '@/lib/invoiceUtils';
 import { supabase, InvoiceRow } from '@/lib/supabase';
@@ -238,7 +239,7 @@ export default function InvoicePage() {
         {/* ── Top bar ─────────────────────────────────────── */}
         <div className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Hafija Auto" className="h-9 w-9 object-contain" />
+            <NextImage src="/logo.png" alt="Hafija Auto" width={36} height={36} className="object-contain" />
             <div>
               <div className="font-bold text-yellow-400 text-base leading-none">HAFIJA AUTO</div>
               <div className="text-xs text-gray-400">Invoice &amp; Quotation</div>
