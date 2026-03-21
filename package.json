@@ -15,7 +15,7 @@
     "cheerio": "^1.0.0",
     "embla-carousel-autoplay": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
-    "next": "15.0.3",
+    "next": "15.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
