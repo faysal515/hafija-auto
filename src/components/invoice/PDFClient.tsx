@@ -199,7 +199,14 @@ const s = StyleSheet.create({
     fontSize: 8,
     fontFamily: "Helvetica-BoldOblique",
     textAlign: "right",
-    marginTop: 16,
+    marginTop: 0,
+    paddingTop: 8,
+    borderTop: "1pt solid #000000",
+  },
+  sigBox: {
+    width: 180,
+    minHeight: 70,
+    justifyContent: "flex-end",
   },
 });
 
@@ -419,7 +426,9 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
               </Text>
             </View>
           </View>
-          <Text style={s.footerSig}>AUTHORISED SIGNATURE</Text>
+          <View style={s.sigBox}>
+            <Text style={s.footerSig}>AUTHORISED SIGNATURE</Text>
+          </View>
         </View>
       </Page>
     </Document>
