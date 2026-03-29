@@ -54,9 +54,10 @@ function defaultData(): InvoiceData {
     ref: generateRef(),
     date: new Date().toLocaleDateString('en-GB'),
     toCompany: '', toAddress: '', toAC: '',
+    customerName: '', customerPhone: '', customerAddress: '',
     brand: '', model: '', grade: '', yearModel: '',
     chassisNo: '', engineNo: '', cc: '', color: '', options: '',
-    qty: 1, unitPrice: 0,
+    qty: 1, unitPrice: 0, advancePayment: 0,
   };
 }
 
@@ -145,23 +146,27 @@ export default function InvoicePage() {
   // ── Load a saved invoice into the form ──────────────────────────────────────
   const loadRow = useCallback((row: InvoiceRow) => {
     setData({
-      type:      row.type,
-      ref:       row.ref,
-      date:      row.date,
-      toCompany: row.to_company  ?? '',
-      toAddress: row.to_address  ?? '',
-      toAC:      row.to_ac       ?? '',
-      brand:     row.brand       ?? '',
-      model:     row.model       ?? '',
-      grade:     row.grade       ?? '',
-      yearModel: row.year_model  ?? '',
-      chassisNo: row.chassis_no  ?? '',
-      engineNo:  row.engine_no   ?? '',
-      cc:        row.cc          ?? '',
-      color:     row.color       ?? '',
-      options:   row.options     ?? '',
-      qty:       row.qty,
-      unitPrice: row.unit_price,
+      type:            row.type,
+      ref:             row.ref,
+      date:            row.date,
+      toCompany:       row.to_company      ?? '',
+      toAddress:       row.to_address      ?? '',
+      toAC:            row.to_ac           ?? '',
+      customerName:    row.customer_name   ?? '',
+      customerPhone:   row.customer_phone  ?? '',
+      customerAddress: row.customer_address ?? '',
+      brand:           row.brand           ?? '',
+      model:           row.model           ?? '',
+      grade:           row.grade           ?? '',
+      yearModel:       row.year_model      ?? '',
+      chassisNo:       row.chassis_no      ?? '',
+      engineNo:        row.engine_no       ?? '',
+      cc:              row.cc              ?? '',
+      color:           row.color           ?? '',
+      options:         row.options         ?? '',
+      qty:             row.qty,
+      unitPrice:       row.unit_price,
+      advancePayment:  row.advance_payment ?? 0,
     });
     setSidebarOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -174,25 +179,29 @@ export default function InvoicePage() {
     const total = data.qty * data.unitPrice;
 
     const payload = {
-      ref:        data.ref,
-      type:       data.type,
-      date:       data.date,
-      to_company: data.toCompany  || null,
-      to_address: data.toAddress  || null,
-      to_ac:      data.toAC       || null,
-      brand:      data.brand      || null,
-      model:      data.model      || null,
-      grade:      data.grade      || null,
-      year_model: data.yearModel  || null,
-      chassis_no: data.chassisNo  || null,
-      engine_no:  data.engineNo   || null,
-      cc:         data.cc         || null,
-      color:      data.color      || null,
-      options:    data.options    || null,
-      qty:        data.qty,
-      unit_price: data.unitPrice,
-      total_price: total,
-      created_by: userId,
+      ref:             data.ref,
+      type:            data.type,
+      date:            data.date,
+      to_company:      data.toCompany       || null,
+      to_address:      data.toAddress       || null,
+      to_ac:           data.toAC            || null,
+      customer_name:   data.customerName    || null,
+      customer_phone:  data.customerPhone   || null,
+      customer_address: data.customerAddress || null,
+      brand:           data.brand           || null,
+      model:           data.model           || null,
+      grade:           data.grade           || null,
+      year_model:      data.yearModel       || null,
+      chassis_no:      data.chassisNo       || null,
+      engine_no:       data.engineNo        || null,
+      cc:              data.cc              || null,
+      color:           data.color           || null,
+      options:         data.options         || null,
+      qty:             data.qty,
+      unit_price:      data.unitPrice,
+      advance_payment: data.advancePayment  || 0,
+      total_price:     total,
+      created_by:      userId,
     };
 
     // Upsert on ref so re-saving an existing one updates it
@@ -333,13 +342,27 @@ export default function InvoicePage() {
               </div>
             </section>
 
-            {/* Recipient */}
+            {/* Recipient / Customer */}
             <section className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-              <h2 className="text-sm font-bold text-yellow-400 uppercase tracking-widest mb-4">Recipient</h2>
+              <h2 className="text-sm font-bold text-yellow-400 uppercase tracking-widest mb-4">
+                {data.type === 'QUOTATION' ? 'Recipient' : 'Customer Details'}
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Company / Person" name="toCompany" value={data.toCompany} onChange={update} placeholder="e.g. Mutual Trust Bank PLC" />
-                <Field label="Address"          name="toAddress" value={data.toAddress} onChange={update} placeholder="e.g. Aganagar, Keraniganj" />
-                <Field label="A/C Name (opt.)"  name="toAC"      value={data.toAC}      onChange={update} placeholder="e.g. Fahmina Faroque" />
+                {data.type === 'QUOTATION' ? (
+                  <>
+                    <Field label="Company / Person" name="toCompany" value={data.toCompany} onChange={update} placeholder="e.g. Mutual Trust Bank PLC" />
+                    <Field label="Address"          name="toAddress" value={data.toAddress} onChange={update} placeholder="e.g. Aganagar, Keraniganj" />
+                    <Field label="A/C Name (opt.)"  name="toAC"      value={data.toAC}      onChange={update} placeholder="e.g. Fahmina Faroque" />
+                  </>
+                ) : (
+                  <>
+                    <Field label="Customer Name"    name="customerName"    value={data.customerName}    onChange={update} placeholder="e.g. John Doe" required />
+                    <Field label="Phone Number"     name="customerPhone"   value={data.customerPhone}   onChange={update} placeholder="e.g. +8801712345678" required />
+                    <div className="sm:col-span-2">
+                      <Field label="Address"        name="customerAddress" value={data.customerAddress} onChange={update} placeholder="e.g. House 10, Road 5, Dhanmondi, Dhaka" required />
+                    </div>
+                  </>
+                )}
               </div>
             </section>
 
@@ -374,9 +397,23 @@ export default function InvoicePage() {
                   </div>
                 </div>
               </div>
+
+              {/* Advance Payment & Due Amount for INVOICE */}
+              {data.type === 'INVOICE' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  <Field label="Advance Payment (৳)" name="advancePayment" value={data.advancePayment} onChange={update} type="number" placeholder="e.g. 1000000" />
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-yellow-400 uppercase tracking-wider">Due Amount</label>
+                    <div className="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm font-bold text-red-400">
+                      {total > 0 ? `৳ ${(total - (data.advancePayment || 0)).toLocaleString()}` : '—'}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {total > 0 && (
                 <div className="mt-4 p-3 bg-gray-700 rounded text-sm font-bold text-white tracking-wide">
-                  IN WORD: {inWords}
+                  IN WORD: {data.type === 'INVOICE' ? numberToWords(total - (data.advancePayment || 0)) : inWords}
                 </div>
               )}
             </section>

@@ -14,6 +14,9 @@ export interface InvoiceRow {
   to_company: string | null;
   to_address: string | null;
   to_ac: string | null;
+  customer_name: string | null;
+  customer_phone: string | null;
+  customer_address: string | null;
   brand: string | null;
   model: string | null;
   grade: string | null;
@@ -25,6 +28,7 @@ export interface InvoiceRow {
   options: string | null;
   qty: number;
   unit_price: number;
+  advance_payment: number;
   total_price: number;
   created_at: string;
   created_by: string | null;

@@ -13,7 +13,7 @@
  *  3. usePDF hook instead of PDFDownloadLink render-prop — gives a stable blob
  *     URL we can attach to a plain <button> with no reconciler conflicts.
  */
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from "react";
 import {
   Document,
   Page,
@@ -23,82 +23,184 @@ import {
   StyleSheet,
   usePDF,
   PDFViewer,
-} from '@react-pdf/renderer';
-import { InvoiceData, numberToWords } from '@/lib/invoiceUtils';
-import LOGO_BASE64 from '@/lib/logoBase64';
+} from "@react-pdf/renderer";
+import { InvoiceData, numberToWords } from "@/lib/invoiceUtils";
+import LOGO_BASE64 from "@/lib/logoBase64";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
-const BLACK = '#000000';
-const GREY  = '#666666';
+const BLACK = "#000000";
+const GREY = "#666666";
 
 const s = StyleSheet.create({
   page: {
-    fontFamily: 'Helvetica',
+    fontFamily: "Helvetica",
     fontSize: 9,
-    padding: '28pt 36pt 24pt 36pt',
+    padding: "28pt 36pt 24pt 36pt",
     color: BLACK,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
 
   // Header
-  headerRow:      { flexDirection: 'row', alignItems: 'center', marginBottom: 4, paddingBottom: 6, borderBottom: '2pt solid #000000' },
-  logoBox:        { width: 70, height: 70, marginRight: 12, flexShrink: 0 },
-  logo:           { width: '100%', height: '100%', objectFit: 'contain' },
-  headerMiddle:   { flex: 1, justifyContent: 'center' },
-  tagline:        { fontSize: 8, fontFamily: 'Helvetica-Bold', letterSpacing: 0.4, marginBottom: 2 },
-  companyName:    { fontSize: 20, fontFamily: 'Helvetica-Bold', letterSpacing: 1 },
-  subTagline:     { fontSize: 7, color: GREY },
-  headerRight:    { width: 130, alignItems: 'flex-end', justifyContent: 'center' },
-  proprietorName: { fontSize: 11, fontFamily: 'Helvetica-Bold', textAlign: 'right' },
-  proprietorTitle:{ fontSize: 8, color: GREY, textAlign: 'right' },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+    paddingBottom: 6,
+    borderBottom: "2pt solid #000000",
+  },
+  logoBox: { width: 70, height: 70, marginRight: 12, flexShrink: 0 },
+  logo: { width: "100%", height: "100%", objectFit: "contain" },
+  headerMiddle: { flex: 1, justifyContent: "center" },
+  tagline: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    letterSpacing: 0.4,
+    marginBottom: 2,
+  },
+  companyName: { fontSize: 20, fontFamily: "Helvetica-Bold", letterSpacing: 1 },
+  subTagline: { fontSize: 7, color: GREY },
+  headerRight: { width: 130, alignItems: "flex-end", justifyContent: "center" },
+  proprietorName: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    textAlign: "right",
+  },
+  proprietorTitle: { fontSize: 8, color: GREY, textAlign: "right" },
 
   // REF / Date bar
-  refBar:   { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8, marginBottom: 6 },
-  refText:  { fontSize: 9, fontFamily: 'Helvetica-Bold' },
-  dateText: { fontSize: 9, fontFamily: 'Helvetica-Bold' },
+  refBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
+    marginBottom: 6,
+  },
+  refText: { fontSize: 9, fontFamily: "Helvetica-Bold" },
+  dateText: { fontSize: 9, fontFamily: "Helvetica-Bold" },
 
   // Title
-  titleBox: { alignItems: 'center', marginBottom: 10 },
-  title:    { fontSize: 18, fontFamily: 'Helvetica-BoldOblique', letterSpacing: 2, textDecoration: 'underline' },
+  titleBox: { alignItems: "center", marginBottom: 10 },
+  title: {
+    fontSize: 18,
+    fontFamily: "Helvetica-BoldOblique",
+    letterSpacing: 2,
+    textDecoration: "underline",
+  },
 
   // TO section
-  toLabel:  { fontSize: 9, fontFamily: 'Helvetica-Bold', marginBottom: 2 },
-  toLine:   { fontSize: 9, fontFamily: 'Helvetica-BoldOblique', marginLeft: 16, lineHeight: 1.4 },
-  acLine:   { fontSize: 9, fontFamily: 'Helvetica-BoldOblique', marginLeft: 16, marginTop: 4 },
-  dearLine: { fontSize: 9, fontFamily: 'Helvetica-Bold', marginTop: 6, marginBottom: 2 },
-  bodyText: { fontSize: 8.5, fontFamily: 'Helvetica-BoldOblique', lineHeight: 1.4, marginBottom: 8 },
+  toLabel: { fontSize: 9, fontFamily: "Helvetica-Bold", marginBottom: 2 },
+  toLine: {
+    fontSize: 9,
+    fontFamily: "Helvetica-BoldOblique",
+    marginLeft: 16,
+    lineHeight: 1.4,
+  },
+  acLine: {
+    fontSize: 9,
+    fontFamily: "Helvetica-BoldOblique",
+    marginLeft: 16,
+    marginTop: 4,
+  },
+  dearLine: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    marginTop: 6,
+    marginBottom: 2,
+  },
+  bodyText: {
+    fontSize: 8.5,
+    fontFamily: "Helvetica-BoldOblique",
+    lineHeight: 1.4,
+    marginBottom: 8,
+  },
 
   // Table
-  table:        { width: '100%', borderTop: '1.5pt solid #000000', borderLeft: '1.5pt solid #000000', borderRight: '1.5pt solid #000000' },
-  tableHeaderRow: { flexDirection: 'row', borderBottom: '1.5pt solid #000000' },
-  tableRow:     { flexDirection: 'row', borderBottom: '1pt solid #000000' },
-  tableLastRow: { flexDirection: 'row', borderBottom: '1.5pt solid #000000' },
+  table: {
+    width: "100%",
+    borderTop: "1.5pt solid #000000",
+    borderLeft: "1.5pt solid #000000",
+    borderRight: "1.5pt solid #000000",
+  },
+  tableHeaderRow: { flexDirection: "row", borderBottom: "1.5pt solid #000000" },
+  tableRow: { flexDirection: "row", borderBottom: "1pt solid #000000" },
+  tableLastRow: { flexDirection: "row", borderBottom: "1.5pt solid #000000" },
 
-  colDesc:  { flex: 1, borderRight: '1pt solid #000000', padding: '4pt 6pt' },
-  colQty:   { width: 30, borderRight: '1pt solid #000000', padding: '4pt 4pt', alignItems: 'center' },
-  colUnit:  { width: 70, borderRight: '1pt solid #000000', padding: '4pt 6pt', alignItems: 'center' },
-  colTotal: { width: 70, padding: '4pt 6pt', alignItems: 'center' },
+  colDesc: { flex: 1, borderRight: "1pt solid #000000", padding: "4pt 6pt" },
+  colQty: {
+    width: 30,
+    borderRight: "1pt solid #000000",
+    padding: "4pt 4pt",
+    alignItems: "center",
+  },
+  colUnit: {
+    width: 70,
+    borderRight: "1pt solid #000000",
+    padding: "4pt 6pt",
+    alignItems: "center",
+  },
+  colTotal: { width: 70, padding: "4pt 6pt", alignItems: "center" },
 
-  headerCell: { fontSize: 8, fontFamily: 'Helvetica-BoldOblique', textAlign: 'center' },
-  descLine:   { fontSize: 8.5, fontFamily: 'Helvetica-BoldOblique', lineHeight: 1.5 },
-  descVal:    { fontSize: 8.5, fontFamily: 'Helvetica-Bold' },
-  priceText:  { fontSize: 10, fontFamily: 'Helvetica-BoldOblique', textAlign: 'center' },
-  termsText:  { fontSize: 7.5, fontFamily: 'Helvetica-BoldOblique', lineHeight: 1.4 },
-  totalLabel: { fontSize: 9, fontFamily: 'Helvetica-Bold' },
-  totalVal:   { fontSize: 10, fontFamily: 'Helvetica-BoldOblique', textAlign: 'center' },
+  headerCell: {
+    fontSize: 8,
+    fontFamily: "Helvetica-BoldOblique",
+    textAlign: "center",
+  },
+  descLine: {
+    fontSize: 8.5,
+    fontFamily: "Helvetica-BoldOblique",
+    lineHeight: 1.5,
+  },
+  descVal: { fontSize: 8.5, fontFamily: "Helvetica-Bold" },
+  priceText: {
+    fontSize: 10,
+    fontFamily: "Helvetica-BoldOblique",
+    textAlign: "center",
+  },
+  termsText: {
+    fontSize: 7.5,
+    fontFamily: "Helvetica-BoldOblique",
+    lineHeight: 1.4,
+  },
+  totalLabel: { fontSize: 9, fontFamily: "Helvetica-Bold" },
+  totalVal: {
+    fontSize: 10,
+    fontFamily: "Helvetica-BoldOblique",
+    textAlign: "center",
+  },
 
   // In word
-  inWordRow:   { flexDirection: 'row', marginTop: 8, marginBottom: 10 },
-  inWordLabel: { fontSize: 9, fontFamily: 'Helvetica-BoldOblique', marginRight: 4 },
-  inWordValue: { fontSize: 9, fontFamily: 'Helvetica-Bold' },
+  inWordRow: { flexDirection: "row", marginTop: 8, marginBottom: 10 },
+  inWordLabel: {
+    fontSize: 9,
+    fontFamily: "Helvetica-BoldOblique",
+    marginRight: 4,
+  },
+  inWordValue: { fontSize: 9, fontFamily: "Helvetica-Bold" },
 
   // Footer
-  footer:      { borderTop: '1pt solid #000000', paddingTop: 6, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 4 },
-  footerLeft:  { flex: 1 },
-  footerLine:  { flexDirection: 'row', alignItems: 'center', marginBottom: 3 },
-  footerIcon:  { width: 10, fontSize: 8, marginRight: 6, textAlign: 'center', fontFamily: 'Helvetica-Bold' },
-  footerText:  { fontSize: 8 },
-  footerSig:   { fontSize: 8, fontFamily: 'Helvetica-BoldOblique', textAlign: 'right', marginTop: 16 },
+  footer: {
+    borderTop: "1pt solid #000000",
+    paddingTop: 6,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    marginTop: 4,
+  },
+  footerLeft: { flex: 1 },
+  footerLine: { flexDirection: "row", alignItems: "center", marginBottom: 3 },
+  footerIcon: {
+    width: 10,
+    fontSize: 8,
+    marginRight: 6,
+    textAlign: "center",
+    fontFamily: "Helvetica-Bold",
+  },
+  footerText: { fontSize: 8 },
+  footerSig: {
+    fontSize: 8,
+    fontFamily: "Helvetica-BoldOblique",
+    textAlign: "right",
+    marginTop: 16,
+  },
 });
 
 // ─── VRow: use createElement to avoid JSX whitespace '' text nodes ────────────
@@ -107,7 +209,8 @@ const s = StyleSheet.create({
 function VRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return React.createElement(
-    Text, { style: s.descLine },
+    Text,
+    { style: s.descLine },
     label,
     React.createElement(Text, { style: s.descVal }, value.toUpperCase()),
   );
@@ -116,15 +219,16 @@ function VRow({ label, value }: { label: string; value: string }) {
 // ─── The PDF document ─────────────────────────────────────────────────────────
 function InvoiceDocument({ data }: { data: InvoiceData }) {
   const total = data.qty * data.unitPrice;
+  const dueAmount = total - (data.advancePayment || 0);
 
-  const terms = data.type === 'QUOTATION'
-    ? 'PAYMENT: 100% PAYMENT SHOULD BE MADE IN CASH/P.O/D.D/T.T IN FAVOR OF HAFIJA AUTO AT THE TIME OF DELIVERY.\nDELIVERY: WITHIN 7 (SEVEN) DAYS AFTER RECEIVING PURCHASE/WORD ORDER.\nWARRANTY: WE SHALL PROVIDE FREE AFTER SALES SERVICE FOR ONE YEAR WITHOUT SPARE PARTS.\nVALIDITY: VALID FOR 20 (TWENTY) DAYS FROM THE DATE OF ISSUE.'
-    : 'PAYMENT: 100% PAYMENT HAS BEEN RECEIVED IN CASH/P.O/D.D/T.T IN FAVOR OF HAFIJA AUTO.\nDELIVERY: VEHICLE DELIVERED AS PER AGREED TERMS.\nWARRANTY: FREE AFTER SALES SERVICE FOR ONE YEAR WITHOUT SPARE PARTS.';
+  const terms =
+    data.type === "QUOTATION"
+      ? "PAYMENT: 100% PAYMENT SHOULD BE MADE IN CASH/P.O/D.D/T.T IN FAVOR OF HAFIJA AUTO AT THE TIME OF DELIVERY.\nDELIVERY: WITHIN 7 (SEVEN) DAYS AFTER RECEIVING PURCHASE/WORD ORDER.\nWARRANTY: WE SHALL PROVIDE FREE AFTER SALES SERVICE FOR ONE YEAR WITHOUT SPARE PARTS.\nVALIDITY: VALID FOR 20 (TWENTY) DAYS FROM THE DATE OF ISSUE."
+      : "DELIVERY: VEHICLE DELIVERED AS PER AGREED TERMS.\nWARRANTY: FREE AFTER SALES SERVICE FOR ONE YEAR WITHOUT SPARE PARTS.";
 
   return (
     <Document title={`${data.type} ${data.ref}`} author="Hafija Auto">
       <Page size="A4" style={s.page}>
-
         {/* HEADER */}
         <View style={s.headerRow}>
           <View style={s.logoBox}>
@@ -133,9 +237,9 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
             <Image style={s.logo} src={LOGO_BASE64} />
           </View>
           <View style={s.headerMiddle}>
-            <Text style={s.tagline}>ALL KIND OF RECONDITIONED CAR RETAILER &amp; WHOLESALER</Text>
-            <Text style={s.companyName}>HAFIJA AUTO</Text>
-            <Text style={s.subTagline}>Just Buy and Run</Text>
+            <Text style={s.tagline}>
+              ALL KIND OF RECONDITIONED CAR RETAILER &amp; WHOLESALER
+            </Text>
           </View>
           <View style={s.headerRight}>
             <Text style={s.proprietorName}>FARDIN ISLAM ALAMIN</Text>
@@ -145,8 +249,8 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
 
         {/* REF / DATE */}
         <View style={s.refBar}>
-          <Text style={s.refText}>{'REF: ' + data.ref}</Text>
-          <Text style={s.dateText}>{'DATE: ' + data.date}</Text>
+          <Text style={s.refText}>{"REF: " + data.ref}</Text>
+          <Text style={s.dateText}>{"DATE: " + data.date}</Text>
         </View>
 
         {/* TITLE */}
@@ -154,17 +258,43 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
           <Text style={s.title}>{data.type}</Text>
         </View>
 
-        {/* TO */}
+        {/* TO / CUSTOMER */}
         <View style={{ marginBottom: 8 }}>
           <Text style={s.toLabel}>TO,</Text>
-          {!!data.toCompany && <Text style={s.toLine}>{data.toCompany.toUpperCase()}</Text>}
-          {!!data.toAddress && <Text style={s.toLine}>{data.toAddress.toUpperCase()}</Text>}
-          {!!data.toAC      && <Text style={s.acLine}>{'A/C: ' + data.toAC.toUpperCase()}</Text>}
-          <Text style={s.dearLine}>DEAR SIR,</Text>
+          {data.type === "QUOTATION" ? (
+            <>
+              {!!data.toCompany && (
+                <Text style={s.toLine}>{data.toCompany.toUpperCase()}</Text>
+              )}
+              {!!data.toAddress && (
+                <Text style={s.toLine}>{data.toAddress.toUpperCase()}</Text>
+              )}
+              {!!data.toAC && (
+                <Text style={s.acLine}>
+                  {"A/C: " + data.toAC.toUpperCase()}
+                </Text>
+              )}
+              <Text style={s.dearLine}>DEAR SIR,</Text>
+            </>
+          ) : (
+            <>
+              {!!data.customerName && (
+                <Text style={s.toLine}>{data.customerName.toUpperCase()}</Text>
+              )}
+              {!!data.customerPhone && (
+                <Text style={s.toLine}>{"PHONE: " + data.customerPhone}</Text>
+              )}
+              {!!data.customerAddress && (
+                <Text style={s.toLine}>
+                  {data.customerAddress.toUpperCase()}
+                </Text>
+              )}
+            </>
+          )}
           <Text style={s.bodyText}>
-            {data.type === 'QUOTATION'
-              ? 'WE ARE PLEASED TO OFFER YOU THE UNDER MENTION VEHICLE WITH THE FOLLOWING TERM & CONDITION:'
-              : 'WE ARE PLEASED TO CONFIRM THE SALE OF THE UNDER MENTIONED VEHICLE AS PER THE FOLLOWING DETAILS:'}
+            {data.type === "QUOTATION"
+              ? "WE ARE PLEASED TO OFFER YOU THE UNDER MENTION VEHICLE WITH THE FOLLOWING TERM & CONDITION:"
+              : ""}
           </Text>
         </View>
 
@@ -172,24 +302,32 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
         <View style={s.table}>
           {/* Header */}
           <View style={s.tableHeaderRow}>
-            <View style={s.colDesc}><Text style={s.headerCell}>DESCRIPTION OF VEHICLE</Text></View>
-            <View style={s.colQty}><Text style={s.headerCell}>QTY</Text></View>
-            <View style={s.colUnit}><Text style={s.headerCell}>{'UNIT\nPRICE'}</Text></View>
-            <View style={s.colTotal}><Text style={s.headerCell}>{'TOTAL\nPRICE'}</Text></View>
+            <View style={s.colDesc}>
+              <Text style={s.headerCell}>DESCRIPTION OF VEHICLE</Text>
+            </View>
+            <View style={s.colQty}>
+              <Text style={s.headerCell}>QTY</Text>
+            </View>
+            <View style={s.colUnit}>
+              <Text style={s.headerCell}>{"UNIT\nPRICE"}</Text>
+            </View>
+            <View style={s.colTotal}>
+              <Text style={s.headerCell}>{"TOTAL\nPRICE"}</Text>
+            </View>
           </View>
 
           {/* Vehicle row */}
           <View style={s.tableRow}>
             <View style={s.colDesc}>
               <VRow label="BRAND NAME: " value={data.brand} />
-              <VRow label="MODEL: "      value={data.model} />
-              <VRow label="GRADE: "      value={data.grade} />
+              <VRow label="MODEL: " value={data.model} />
+              <VRow label="GRADE: " value={data.grade} />
               <VRow label="YEAR MODEL: " value={data.yearModel} />
               <VRow label="CHASSIS NO: " value={data.chassisNo} />
-              <VRow label="ENGINE NO: "  value={data.engineNo} />
-              <VRow label="CC: "         value={data.cc} />
-              <VRow label="COLOR: "      value={data.color} />
-              <VRow label="OPTIONS: "    value={data.options} />
+              <VRow label="ENGINE NO: " value={data.engineNo} />
+              <VRow label="CC: " value={data.cc} />
+              <VRow label="COLOR: " value={data.color} />
+              <VRow label="OPTIONS: " value={data.options} />
             </View>
             <View style={s.colQty}>
               <Text style={s.priceText}>{String(data.qty)}</Text>
@@ -204,8 +342,8 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
 
           {/* Terms row */}
           <View style={s.tableRow}>
-            <View style={{ flex: 1, padding: '4pt 6pt' }}>
-              <Text style={s.termsText}>{'TERMS & CONDITION:\n' + terms}</Text>
+            <View style={{ flex: 1, padding: "4pt 6pt" }}>
+              <Text style={s.termsText}>{"TERMS & CONDITION:\n" + terms}</Text>
             </View>
             <View style={s.colQty} />
             <View style={s.colUnit} />
@@ -213,18 +351,54 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
           </View>
 
           {/* Total row */}
-          <View style={s.tableLastRow}>
-            <View style={s.colDesc}><Text style={s.totalLabel}>TOTAL</Text></View>
+          <View style={data.type === "INVOICE" ? s.tableRow : s.tableLastRow}>
+            <View style={s.colDesc}>
+              <Text style={s.totalLabel}>TOTAL</Text>
+            </View>
             <View style={s.colQty} />
             <View style={s.colUnit} />
-            <View style={s.colTotal}><Text style={s.totalVal}>{total.toLocaleString()}</Text></View>
+            <View style={s.colTotal}>
+              <Text style={s.totalVal}>{total.toLocaleString()}</Text>
+            </View>
           </View>
+
+          {/* Advance Payment & Due Amount for INVOICE */}
+          {data.type === "INVOICE" && (
+            <>
+              <View style={s.tableRow}>
+                <View style={s.colDesc}>
+                  <Text style={s.totalLabel}>ADVANCE PAYMENT</Text>
+                </View>
+                <View style={s.colQty} />
+                <View style={s.colUnit} />
+                <View style={s.colTotal}>
+                  <Text style={s.totalVal}>
+                    {(data.advancePayment || 0).toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+              <View style={s.tableLastRow}>
+                <View style={s.colDesc}>
+                  <Text style={s.totalLabel}>DUE AMOUNT</Text>
+                </View>
+                <View style={s.colQty} />
+                <View style={s.colUnit} />
+                <View style={s.colTotal}>
+                  <Text style={s.totalVal}>{dueAmount.toLocaleString()}</Text>
+                </View>
+              </View>
+            </>
+          )}
         </View>
 
         {/* IN WORD */}
         <View style={s.inWordRow}>
           <Text style={s.inWordLabel}>IN WORD: </Text>
-          <Text style={s.inWordValue}>{numberToWords(total)}</Text>
+          <Text style={s.inWordValue}>
+            {data.type === "INVOICE"
+              ? numberToWords(dueAmount)
+              : numberToWords(total)}
+          </Text>
         </View>
 
         {/* FOOTER */}
@@ -240,12 +414,13 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
             </View>
             <View style={s.footerLine}>
               <Text style={s.footerIcon}>L</Text>
-              <Text style={s.footerText}>8/1 Gopi Kishan Lane Road Wari, Dhaka</Text>
+              <Text style={s.footerText}>
+                8/1 Gopi Kishan Lane Road Wari, Dhaka
+              </Text>
             </View>
           </View>
           <Text style={s.footerSig}>AUTHORISED SIGNATURE</Text>
         </View>
-
       </Page>
     </Document>
   );
@@ -263,7 +438,9 @@ export function PDFDownloadButton({
   fileName: string;
   className?: string;
 }) {
-  const [instance, updateInstance] = usePDF({ document: <InvoiceDocument data={data} /> });
+  const [instance, updateInstance] = usePDF({
+    document: <InvoiceDocument data={data} />,
+  });
 
   // Keep the blob in sync with form changes
   const prevRef = useRef<InvoiceData | null>(null);
@@ -276,7 +453,7 @@ export function PDFDownloadButton({
 
   const handleClick = useCallback(() => {
     if (!instance.url) return;
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = instance.url;
     a.download = fileName;
     a.click();
@@ -288,7 +465,7 @@ export function PDFDownloadButton({
       disabled={instance.loading || !instance.url}
       className={className}
     >
-      {instance.loading ? 'Preparing…' : '⬇ Download PDF'}
+      {instance.loading ? "Preparing…" : "⬇ Download PDF"}
     </button>
   );
 }
@@ -304,13 +481,18 @@ export function PDFPreviewModal({
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex flex-col">
       <div className="flex items-center justify-between px-4 py-3 bg-gray-900 border-b border-gray-700">
-        <span className="font-bold text-yellow-400">{'PDF Preview — ' + data.ref}</span>
-        <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl leading-none">
+        <span className="font-bold text-yellow-400">
+          {"PDF Preview — " + data.ref}
+        </span>
+        <button
+          onClick={onClose}
+          className="text-gray-400 hover:text-white text-2xl leading-none"
+        >
           ✕
         </button>
       </div>
       <div className="flex-1 overflow-hidden">
-        <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
+        <PDFViewer width="100%" height="100%" style={{ border: "none" }}>
           <InvoiceDocument data={data} />
         </PDFViewer>
       </div>

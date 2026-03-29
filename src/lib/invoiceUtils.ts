@@ -53,10 +53,14 @@ export interface InvoiceData {
   type: InvoiceType;
   ref: string;
   date: string;
-  // Recipient
+  // Recipient (for QUOTATION - company details)
   toCompany: string;
   toAddress: string;
   toAC: string;
+  // Customer (for INVOICE - customer details)
+  customerName: string;
+  customerPhone: string;
+  customerAddress: string;
   // Vehicle
   brand: string;
   model: string;
@@ -70,4 +74,5 @@ export interface InvoiceData {
   // Pricing
   qty: number;
   unitPrice: number;
+  advancePayment: number;
 }
