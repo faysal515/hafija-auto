@@ -247,6 +247,8 @@ function InvoiceDocument({ data }: { data: InvoiceData }) {
             <Text style={s.tagline}>
               ALL KIND OF RECONDITIONED CAR RETAILER &amp; WHOLESALER
             </Text>
+            <Text style={s.companyName}>HAFIJA AUTO</Text>
+            <Text style={s.subTagline}>Just Buy and Run</Text>
           </View>
           <View style={s.headerRight}>
             <Text style={s.proprietorName}>FARDIN ISLAM ALAMIN</Text>
